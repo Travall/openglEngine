@@ -48,13 +48,36 @@ public class DummyGame implements IGameLogic {
         scene = new Scene();
 
         float skyBoxScale = 50.0f;
-        float terrainScale = 10;
-        int terrainSize = 3;
-        float minY = -0.075f;
-        float maxY = 0.075f;
-        int textInc = 40;
-        Terrain terrain = new Terrain(terrainSize, terrainScale, minY, maxY, "D:/Finn/Documents/Dev/Java/LWJGLGameEngine/src/resources/textures/heightmap.png", "/resources/textures/terrain.png", textInc);
-        scene.setGameItems(terrain.getGameItems());
+
+        HeightMapMesh heightMapMesh = new HeightMapMesh(0, 0, 0, 1, 256,256, 40);
+        HeightMapMesh heightMapMesh2 = new HeightMapMesh(0, 256, 0, 1, 256,256, 40);
+        HeightMapMesh heightMapMesh3 = new HeightMapMesh(256, 0, 0, 1, 256,256, 40);
+        HeightMapMesh heightMapMesh4 = new HeightMapMesh(256, 256, 0, 1, 256,256, 40);
+
+        GameItem terrainBlock = new GameItem(heightMapMesh.getMesh());
+        terrainBlock.setPosition(0, 0f, 0);
+        terrainBlock.setScale(10);
+
+        GameItem terrainBlock2 = new GameItem(heightMapMesh2.getMesh());
+        terrainBlock2.setPosition(10, 0f, 0);
+        terrainBlock2.setScale(10);
+
+        GameItem terrainBlock3 = new GameItem(heightMapMesh3.getMesh());
+        terrainBlock3.setPosition(0, 0f, 10);
+        terrainBlock3.setScale(10);
+
+        GameItem terrainBlock4 = new GameItem(heightMapMesh4.getMesh());
+        terrainBlock4.setPosition(10, 0f, 10);
+        terrainBlock4.setScale(10);
+
+        GameItem[] gameItems = new GameItem[4];
+
+        gameItems[0] = terrainBlock;
+        gameItems[1] = terrainBlock2;
+        gameItems[2] = terrainBlock3;
+        gameItems[3] = terrainBlock4;
+
+        scene.setGameItems(gameItems);
 
         // Setup  SkyBox
         SkyBox skyBox = new SkyBox("/resources/models/skybox.obj", "/resources/textures/skybox.png");

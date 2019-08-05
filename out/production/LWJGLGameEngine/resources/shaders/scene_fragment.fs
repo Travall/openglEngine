@@ -6,6 +6,7 @@ const int MAX_SPOT_LIGHTS = 5;
 in vec2 outTexCoord;
 flat in vec3 mvVertexNormal;
 in vec3 mvVertexPos;
+in vec3 worldVertexPos;
 
 out vec4 fragColor;
 
@@ -74,7 +75,10 @@ void setupColours(Material material, vec2 textCoord) {
         //} else {
         //    diffuseC = material.bottomDiffuse;
         //}
-        diffuseC = vec4(0,mvVertexPos.y,0,1);
+        float height = worldVertexPos.y;
+        diffuseC = vec4(0,height,0,1);
+        speculrC = diffuseC;
+        ambientC = diffuseC;
     } else {
         ambientC = material.ambient;
         diffuseC = material.diffuse;

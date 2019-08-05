@@ -25,6 +25,10 @@ public class Scene {
         return meshMap;
     }
 
+    public void resetGameItems() {
+        meshMap = new HashMap<>();
+    }
+
     public void setGameItems(GameItem[] gameItems) {
         int numGameItems = gameItems != null ? gameItems.length : 0;
         for (int i=0; i<numGameItems; i++) {

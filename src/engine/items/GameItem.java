@@ -1,11 +1,14 @@
 package engine.items;
 
 import engine.graph.Mesh;
+import engine.graph.TerrainMesh;
 import org.joml.Vector3f;
 
 public class GameItem {
 
     private Mesh mesh;
+
+    private TerrainMesh terrainMesh;
 
     private final Vector3f position;
 
@@ -22,6 +25,11 @@ public class GameItem {
     public GameItem(Mesh mesh) {
         this();
         this.mesh = mesh;
+    }
+
+    public GameItem(TerrainMesh mesh) {
+        this();
+        this.terrainMesh = mesh;
     }
 
     public Vector3f getPosition() {
@@ -54,6 +62,10 @@ public class GameItem {
 
     public Mesh getMesh() {
         return mesh;
+    }
+
+    public TerrainMesh getTerrainMesh() {
+        return terrainMesh;
     }
 
     public void setMesh(Mesh mesh) {

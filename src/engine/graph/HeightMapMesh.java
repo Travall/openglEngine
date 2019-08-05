@@ -21,53 +21,36 @@ public class HeightMapMesh {
     private final float maxY;
     private final Mesh mesh;
 
-    public HeightMapMesh(float minY, float maxY, String heightMapFile, String textureFile, int textInc) throws Exception {
+    public HeightMapMesh(int startX, int startZ, float minY, float maxY, int widthX, int widthZ, int textInc) throws Exception {
         this.minY = minY;
         this.maxY = maxY;
 
-        ByteBuffer buf = null;
-        int width;
-        int height;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            IntBuffer w = stack.mallocInt(1);
-            IntBuffer h = stack.mallocInt(1);
-            IntBuffer channels = stack.mallocInt(1);
-
-            buf = stbi_load(heightMapFile, w, h, channels, 4);
-            if (buf == null) {
-                throw new Exception("Image file [" + heightMapFile  + "] not loaded: " + stbi_failure_reason());
-            }
-
-            width = w.get();
-            height = h.get();
-        }
-
-//        Texture texture = new Texture(textureFile);
-
-        float incx = getXLength() / (width - 1);
-        float incz = getZLength() / (height - 1);
+        float incx = getXLength() / (widthX - 1);
+        float incz = getZLength() / (widthZ - 1);
 
         List<Float> positions = new ArrayList();
         List<Float> textCoords = new ArrayList();
         List<Integer> indices = new ArrayList();
 
-        for (int row = 0; row < height; row++) {
-            for (int col = 0; col < width; col++) {
+        NoiseGenerator generator = new NoiseGenerator(startX,startZ,1000);
+
+        for (int row = 0; row < widthZ; row++) {
+            for (int col = 0; col < widthX; col++) {
                 // Create vertex for current position
                 positions.add(STARTX + col * incx); // x
-                positions.add(getHeight(col, row, width, buf)); //y
+                positions.add(generator.generateHeight(row,col)); //y
                 positions.add(STARTZ + row * incz); //z
 
                 // Set texture coordinates
-                textCoords.add((float) textInc * (float) col / (float) width);
-                textCoords.add((float) textInc * (float) row / (float) height);
+                textCoords.add((float) textInc * (float) col / (float) widthX);
+                textCoords.add((float) textInc * (float) row / (float) widthZ);
 
                 // Create indices
-                if (col < width - 1 && row < height - 1) {
-                    int leftTop = row * width + col;
-                    int leftBottom = (row + 1) * width + col;
-                    int rightBottom = (row + 1) * width + col + 1;
-                    int rightTop = row * width + col + 1;
+                if (col < widthX - 1 && row < widthZ - 1) {
+                    int leftTop = row * widthX + col;
+                    int leftBottom = (row + 1) * widthX + col;
+                    int rightBottom = (row + 1) * widthX + col + 1;
+                    int rightTop = row * widthX + col + 1;
 
                     indices.add(leftTop);
                     indices.add(leftBottom);
@@ -82,12 +65,10 @@ public class HeightMapMesh {
         float[] posArr = Utils.listToArray(positions);
         int[] indicesArr = indices.stream().mapToInt(i -> i).toArray();
         float[] textCoordsArr = Utils.listToArray(textCoords);
-        float[] normalsArr = calcNormals(posArr, width, height);
+        float[] normalsArr = calcNormals(posArr, widthX, widthZ);
         this.mesh = new Mesh(posArr, textCoordsArr, normalsArr, indicesArr);
         Material material = new Material(new Vector4f(1,1,1,255f),new Vector4f(1,0,0,255f), new Vector4f(0,1,0,255f));
         mesh.setMaterial(material);
-
-        stbi_image_free(buf);
     }
 
     public Mesh getMesh() {
