@@ -1,5 +1,7 @@
 package engine;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,4 +39,21 @@ public class Utils {
         }
         return floatArr;
     }
+
+    public static BufferedImage createGradientImage(int width, int height, Color gradient1, Color gradient2, Color gradient3) {
+
+        BufferedImage gradientImage = new BufferedImage(width, height,BufferedImage.TYPE_INT_ARGB);
+        GradientPaint firstGradient = new GradientPaint(0, 0, gradient1, width / 2, height, gradient2, true);
+        GradientPaint secondGradient = new GradientPaint(width/2, 0, gradient2, width, height, gradient3, true);
+        Graphics2D g2 = (Graphics2D) gradientImage.getGraphics();
+
+        g2.setPaint(firstGradient);
+        g2.fillRect(0, 0, width/2, height);
+        g2.setPaint(secondGradient);
+        g2.fillRect(width/2, 0, width, height);
+        g2.dispose();
+
+        return gradientImage;
+    }
+
 }

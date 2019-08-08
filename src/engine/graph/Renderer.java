@@ -17,7 +17,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
 
-    private static final float FOV = (float) Math.toRadians(120.0f);
+    private static final float FOV = (float) Math.toRadians(60.0f);
     private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1000.f;
     private static final int MAX_POINT_LIGHTS = 5;
@@ -65,6 +65,7 @@ public class Renderer {
         sceneShaderProgram.createUniform("modelViewMatrix");
         sceneShaderProgram.createUniform("worldMatrix");
         sceneShaderProgram.createUniform("texture_sampler");
+        sceneShaderProgram.createUniform("terraintexture_sampler");
         // Create uniform for material
         sceneShaderProgram.createMaterialUniform("material");
         // Create lighting related uniforms
@@ -143,6 +144,7 @@ public class Renderer {
         renderLights(viewMatrix, sceneLight);
 
         sceneShaderProgram.setUniform("texture_sampler", 0);
+        sceneShaderProgram.setUniform("terraintexture_sampler", 0);
         // Render each mesh with the associated game Items
         Map<Mesh, List<GameItem>> mapMeshes = scene.getGameMeshes();
         for (Mesh mesh : mapMeshes.keySet()) {

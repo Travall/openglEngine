@@ -16,24 +16,16 @@ public class Material {
 
     private Texture texture;
 
-    private Vector4f topDiffuse = null;
-    private Vector4f middleDiffuse = null;
-    private Vector4f bottomDiffuse = null;
+    private float[] textureGradient = null;
+
+    private boolean isTerrain = false;
 
     public boolean isTerrain() {
-        return this.topDiffuse != null && this.middleDiffuse != null && this.bottomDiffuse != null;
+        return this.isTerrain;
     }
 
-    public Vector4f getTopDiffuse() {
-        return topDiffuse;
-    }
-
-    public Vector4f getMiddleDiffuse() {
-        return middleDiffuse;
-    }
-
-    public Vector4f getBottomDiffuse() {
-        return bottomDiffuse;
+    public void setTerrain(boolean terrain) {
+        isTerrain = terrain;
     }
 
     public Material() {
@@ -42,15 +34,6 @@ public class Material {
         this.specularColour = DEFAULT_COLOUR;
         this.texture = null;
         this.reflectance = 0;
-    }
-
-    public Material(Vector4f topDiffuse, Vector4f middleDiffuse, Vector4f bottomDiffuse) {
-        this.ambientColour = DEFAULT_COLOUR;
-        this.diffuseColour = DEFAULT_COLOUR;
-        this.specularColour = DEFAULT_COLOUR;
-        this.topDiffuse = topDiffuse;
-        this.middleDiffuse = middleDiffuse;
-        this.bottomDiffuse = bottomDiffuse;
     }
 
     public Material(Vector4f colour, float reflectance) {

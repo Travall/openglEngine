@@ -114,9 +114,14 @@ public class Mesh {
         Texture texture = material.getTexture();
         if (texture != null) {
             // Activate firs texture bank
-            glActiveTexture(GL_TEXTURE0);
             // Bind the texture
-            glBindTexture(GL_TEXTURE_2D, texture.getId());
+            if(material.isTerrain()) {
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_1D, texture.getId());
+            } else {
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, texture.getId());
+            }
         }
 
         // Draw the mesh
@@ -133,7 +138,11 @@ public class Mesh {
         glDisableVertexAttribArray(2);
         glBindVertexArray(0);
 
-        glBindTexture(GL_TEXTURE_2D, 0);
+        if(material.isTerrain()) {
+            glBindTexture(GL_TEXTURE_1D, 1);
+        } else {
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
     }
 
     public void render() {

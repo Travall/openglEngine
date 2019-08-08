@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class NoiseGenerator {
 
-    private static final float AMPLITUDE = 0.5f;
-    private static final int OCTAVES = 6;
+    private static final float AMPLITUDE = 2f;
+    private static final int OCTAVES = 8;
     private static final float ROUGHNESS = 0.3f;
 
     private Random random = new Random();
@@ -33,7 +33,14 @@ public class NoiseGenerator {
             total += getInterpolatedNoise((x+xOffset)*freq, (z + zOffset)*freq) * amp;
         }
 
-        return total;
+        float OldRange = (1 - -1);
+        float NewRange = (1 - 0);
+        float NewValue = (((total - -1) * NewRange) / OldRange) + 0;
+
+//        System.out.println(NewValue);
+
+        return NewValue;
+
     }
 
     private float getInterpolatedNoise(float x, float z){
@@ -67,7 +74,7 @@ public class NoiseGenerator {
     }
 
     private float getNoise(int x, int z) {
-        random.setSeed(x * 49632 + z * 325176 + seed);
+        random.setSeed(x * 495675632 + z * 32517676 + seed);
         return random.nextFloat() * 2f - 1f;
     }
 

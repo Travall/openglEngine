@@ -5,10 +5,13 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.lwjgl.stb.STBImage.*;
 
@@ -32,7 +35,7 @@ public class HeightMapMesh {
         List<Float> textCoords = new ArrayList();
         List<Integer> indices = new ArrayList();
 
-        NoiseGenerator generator = new NoiseGenerator(startX,startZ,1000);
+        NoiseGenerator generator = new NoiseGenerator(startX,startZ, new Random().nextInt());
 
         for (int row = 0; row < widthZ; row++) {
             for (int col = 0; col < widthX; col++) {
@@ -66,8 +69,14 @@ public class HeightMapMesh {
         int[] indicesArr = indices.stream().mapToInt(i -> i).toArray();
         float[] textCoordsArr = Utils.listToArray(textCoords);
         float[] normalsArr = calcNormals(posArr, widthX, widthZ);
+
         this.mesh = new Mesh(posArr, textCoordsArr, normalsArr, indicesArr);
-        Material material = new Material(new Vector4f(1,1,1,255f),new Vector4f(1,0,0,255f), new Vector4f(0,1,0,255f));
+
+        BufferedImage gradient = Utils.createGradientImage(100,1,new Color(87,51,0,255),new Color(0,128,11,255),new Color(247,247,247,255));
+        Texture texture = new Texture(gradient);
+
+        Material material = new Material(texture);
+        material.setTerrain(true);
         mesh.setMaterial(material);
     }
 

@@ -51,6 +51,7 @@ struct Material
 };
 
 uniform sampler2D texture_sampler;
+uniform sampler1D terraintexture_sampler;
 uniform vec3 ambientLight;
 uniform float specularPower;
 uniform Material material;
@@ -63,7 +64,7 @@ vec4 diffuseC;
 vec4 speculrC;
 
 void setupColours(Material material, vec2 textCoord) {
-    if (material.hasTexture == 1) {
+    if (material.hasTexture == 1 && material.isTerrain == 0) {
         ambientC = texture(texture_sampler, textCoord);
         diffuseC = ambientC;
         speculrC = ambientC;
@@ -76,7 +77,8 @@ void setupColours(Material material, vec2 textCoord) {
         //    diffuseC = material.bottomDiffuse;
         //}
         float height = worldVertexPos.y;
-        diffuseC = vec4(0,height,0,1);
+        //diffuseC = vec4(height,height,abs(1 -height),1);
+        diffuseC = texture(terraintexture_sampler, height).rgba;
         speculrC = diffuseC;
         ambientC = diffuseC;
     } else {

@@ -30,7 +30,7 @@ public class DummyGame implements IGameLogic {
 
     private float lightAngle;
 
-    private static final float CAMERA_POS_STEP = 0.05f;
+    private static final float CAMERA_POS_STEP = 0.005f;
 
     private float cameraMovementInc = 1f;
 
@@ -49,33 +49,14 @@ public class DummyGame implements IGameLogic {
 
         float skyBoxScale = 50.0f;
 
-        HeightMapMesh heightMapMesh = new HeightMapMesh(0, 0, 0, 1, 256,256, 40);
-        HeightMapMesh heightMapMesh2 = new HeightMapMesh(0, 256, 0, 1, 256,256, 40);
-        HeightMapMesh heightMapMesh3 = new HeightMapMesh(256, 0, 0, 1, 256,256, 40);
-        HeightMapMesh heightMapMesh4 = new HeightMapMesh(256, 256, 0, 1, 256,256, 40);
+        HeightMapMesh heightMapMesh = new HeightMapMesh(0, 0, 0, 1, 402,402, 40);
 
         GameItem terrainBlock = new GameItem(heightMapMesh.getMesh());
         terrainBlock.setPosition(0, 0f, 0);
-        terrainBlock.setScale(10);
 
-        GameItem terrainBlock2 = new GameItem(heightMapMesh2.getMesh());
-        terrainBlock2.setPosition(10, 0f, 0);
-        terrainBlock2.setScale(10);
-
-        GameItem terrainBlock3 = new GameItem(heightMapMesh3.getMesh());
-        terrainBlock3.setPosition(0, 0f, 10);
-        terrainBlock3.setScale(10);
-
-        GameItem terrainBlock4 = new GameItem(heightMapMesh4.getMesh());
-        terrainBlock4.setPosition(10, 0f, 10);
-        terrainBlock4.setScale(10);
-
-        GameItem[] gameItems = new GameItem[4];
+        GameItem[] gameItems = new GameItem[1];
 
         gameItems[0] = terrainBlock;
-        gameItems[1] = terrainBlock2;
-        gameItems[2] = terrainBlock3;
-        gameItems[3] = terrainBlock4;
 
         scene.setGameItems(gameItems);
 
@@ -137,6 +118,25 @@ public class DummyGame implements IGameLogic {
         } else {
             cameraMovementInc = 1f;
         }
+
+        if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+            scene.resetGameItems();
+            HeightMapMesh heightMapMesh = null;
+            try {
+                heightMapMesh = new HeightMapMesh(0, 0, 0, 1, 402,402, 40);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            GameItem terrainBlock = new GameItem(heightMapMesh.getMesh());
+            terrainBlock.setPosition(0, 0f, 0);
+
+            GameItem[] gameItems = new GameItem[1];
+
+            gameItems[0] = terrainBlock;
+
+            scene.setGameItems(gameItems);
+        }
     }
 
     @Override
@@ -151,7 +151,6 @@ public class DummyGame implements IGameLogic {
 
         // Update camera position
         camera.movePosition(cameraInc.x * CAMERA_POS_STEP * cameraMovementInc, cameraInc.y * CAMERA_POS_STEP * cameraMovementInc, cameraInc.z * CAMERA_POS_STEP * cameraMovementInc);
-
         // Update directional light direction, intensity and colour
         SceneLight sceneLight = scene.getSceneLight();
         // Update directional light direction, intensity and colour
